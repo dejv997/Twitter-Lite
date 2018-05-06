@@ -1,16 +1,97 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="cs">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Twytr lajd</title>
+    <meta name="description" content="">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="cleartype" content="on">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+
     <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+    <link rel="stylesheet" href="css/style.css?v=6" />
     <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
     <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
 </head>
 <body>
-<button id="login" onclick="login()">twitter</button>
-<button id="getname" onclick="getName()">Name</button>
+<div data-role="panel" id="left-panel" data-theme="a" data-display="push">
+    <img class="profile-pic">
+    <p>
+        <strong class="profile-name" style="font-size: 1.2em"></strong><br>
+        <span class="profile-alias" style="color: gray;"></span>
+    </p>
+    <hr>
+    <a href="#" class="ui-btn">Profile</a>
+    <a href="#" class="ui-btn">Sign out</a>
+</div>
+<div data-role="page" id="home" data-share="#shared">
+    <div role="main" class="ui-content">
+        <div style="padding-bottom: 20px;">
+            <div id="new-tweet-container" style="display: flex;">
+                <img class="user-img profile-pic" style="padding-top: 5px;; flex: 0 0 48px">
+                <textarea id="new-tweet" rows="10" placeholder="Co se právě micá?" style="flex: 1" onfocus="showNewTweetControl(true)" onblur="showNewTweetControl(false)" onchange="updateTweetCharCounter()" onkeyup="updateTweetCharCounter()"></textarea>
+            </div>
+            <div id="new-tweet-control" style="display: flex; justify-content: space-between;">
+                <span style="padding-left: 70px" id="tweet-char-counter"></span>
+                <button style="width: auto" id="send-tweet-btn" onclick="sendTweet()">Send tweet</button>
+            </div>
+        </div>
+        <hr>
+        <div id="timeline"></div>
+    </div>
+</div>
+
+<div data-role="page" id="search" data-share="#shared">
+    <div role="main" class="ui-content">
+        search
+    </div>
+</div>
+
+<div data-role="page" id="notifications" data-share="#shared">
+    <div role="main" class="ui-content">
+        notifications
+    </div>
+</div>
+
+<div data-role="page" id="messages" data-share="#shared">
+    <div role="main" class="ui-content">
+        messages
+    </div>
+</div>
+
+<div data-role="page" id="sign-in" >
+    <div role="main" class="ui-content">
+        <button onclick="login()">Přihlásit se!</button>
+    </div>
+</div>
+
+<div data-role="page" id="shared">
+    <div data-role="header">
+        <h1>Twytr lajd</h1>
+        <div data-role="navbar">
+            <ul>
+                <li><a href="#home" data-icon="home" onclick="loadHomeTimeline()">Home</a></li>
+                <li><a href="#search" data-icon="search">Search</a></li>
+                <li><a href="#notifications" data-icon="heart">Notifications</a></li>
+                <li><a href="#messages" data-icon="mail">Messages</a></li>
+            </ul>
+        </div>
+    </div>
+    <div data-role="footer">
+        <h2>tvoje máma</h2>
+    </div>
+</div>
+
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script src="js/oauth.js"></script>
-<script src="js/app.js"></script>
+<script src="js/app.js?v=10"></script>
 </body>
 </html>
