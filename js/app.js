@@ -210,12 +210,15 @@ function updateTweetCharCounter() {
 }
 
 function sendTweet() {
+    console.log(lat + ' ' + long);
     if(!$('#send-tweet-btn').is(':disabled')) {
         api.post('/1.1/statuses/update.json', {
             data: {
                 status: $('#new-tweet').val(),
                 lat: lat,
-                long: long
+                long: long,
+                geo_enabled: true,
+                display_coordinates: true
             }
         })
             .done(function (response) {
