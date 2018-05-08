@@ -34,9 +34,9 @@
 </div>
 <div data-role="page" id="login-page" data-share="#shared">
     <div role="main" class="ui-content">
-        <button id="loginBtn" onclick="login()">Přyhláž se ty pyčo</button>
+        <button id="loginBtn" onclick="login()">Sign in...</button>
         <div id="welcome-message">
-            <h2>Welcome <span class="profile-name"></span></h2>
+            <h2>Welcome <span class="profile-name"></span>!</h2>
         </div>
     </div>
 </div>
@@ -45,7 +45,7 @@
         <div style="padding-bottom: 20px;">
             <div id="new-tweet-container" style="display: flex;">
                 <img class="user-img profile-pic" style="padding-top: 5px;; flex: 0 0 48px">
-                <textarea id="new-tweet" rows="10" placeholder="Co se právě micá?" style="flex: 1" onfocus="showNewTweetControl(true)" onblur="showNewTweetControl(false)" onchange="updateTweetCharCounter()" onkeyup="updateTweetCharCounter()"></textarea>
+                <textarea id="new-tweet" rows="10" placeholder="What's going on right now?" style="flex: 1" onfocus="showNewTweetControl(true)" onblur="showNewTweetControl(false)" onchange="updateTweetCharCounter()" onkeyup="updateTweetCharCounter()"></textarea>
             </div>
             <div id="new-tweet-control" style="display: flex; justify-content: space-between;">
                 <span style="padding-left: 70px" id="tweet-char-counter"></span>
@@ -102,12 +102,12 @@
         </div>
     </div>
     <div data-role="footer">
-        <h2>tvoje máma</h2>
+        <h2>© daskcz 2018</h2>
     </div>
 </div>
 
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script src="js/oauth.js"></script>
-<script src="js/app.js?v=17"></script>
+<script src="js/app.js?v=18"></script>
 </body>
 </html>

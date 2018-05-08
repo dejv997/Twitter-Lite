@@ -77,7 +77,7 @@ if(callback !== undefined) {
                     });
                 })
                 .fail(function (err) {
-                    console.log('pičovina vyjebaná');
+                    console.log('error');
                 });
             /*result.get('/1.1/statuses/user_timeline.json')
                 .done(function (response) {
@@ -113,7 +113,7 @@ function getName() {
             console.log('Name: ', response.name);
         })
         .fail(function (err) {
-            console.log('pičovina vyjebaná');
+            console.log('error');
         });
 }
 
@@ -153,7 +153,7 @@ function loadHomeTimelineAjax() {
             drawHomeTimeline(tmp.data);
         })
         .fail(function (err) {
-            console.log('pičovina vyjebaná');
+            console.log('error');
         });
 }
 
@@ -311,11 +311,11 @@ function loadProfile(user_id) {
                     }
                 })
                 .fail(function (err) {
-                    console.log('pičovina vyjebaná');
+                    console.log('error');
                 });
 
         })
         .fail(function (err) {
-            console.log('pičovina vyjebaná');
+            console.log('error');
         });
 }
