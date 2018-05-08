@@ -29,8 +29,16 @@
         <span class="profile-alias" style="color: gray;"></span>
     </p>
     <hr>
-    <a href="#" class="ui-btn">Profile</a>
+    <button id="profileBtn">Profile</button>
     <a href="#" class="ui-btn">Sign out</a>
+</div>
+<div data-role="page" id="login-page" data-share="#shared">
+    <div role="main" class="ui-content">
+        <button id="loginBtn" onclick="login()">Přyhláž se ty pyčo</button>
+        <div id="welcome-message">
+            <h2>Welcome <span class="profile-name"></span></h2>
+        </div>
+    </div>
 </div>
 <div data-role="page" id="home" data-share="#shared">
     <div role="main" class="ui-content">
@@ -67,6 +75,14 @@
     </div>
 </div>
 
+<div data-role="page" id="profile" data-share="#shared">
+    <div role="main" class="ui-content">
+        <div id="profile-container">
+
+        </div>
+    </div>
+</div>
+
 <div data-role="page" id="sign-in" >
     <div role="main" class="ui-content">
         <button onclick="login()">Přihlásit se!</button>
@@ -78,10 +94,10 @@
         <h1>Twytr lajd</h1>
         <div data-role="navbar">
             <ul>
-                <li><a href="#home" data-icon="home" onclick="loadHomeTimeline()">Home</a></li>
-                <li><a href="#search" data-icon="search">Search</a></li>
-                <li><a href="#notifications" data-icon="heart">Notifications</a></li>
-                <li><a href="#messages" data-icon="mail">Messages</a></li>
+                <li><a href="#home" id="homeBtn" data-icon="home" onclick="loadHomeTimeline()">Timeline</a></li>
+                <li><a href="#search" id="searchBtn" data-icon="search">Search</a></li>
+                <li><a href="#notifications" id="notificationsBtn" data-icon="heart">Notifications</a></li>
+                <li><a href="#messages" id="messagesBtn" data-icon="mail">Messages</a></li>
             </ul>
         </div>
     </div>
@@ -92,6 +108,6 @@
 
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script src="js/oauth.js"></script>
-<script src="js/app.js?v=13"></script>
+<script src="js/app.js?v=17"></script>
 </body>
 </html>

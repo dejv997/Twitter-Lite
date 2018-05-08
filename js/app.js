@@ -1,14 +1,15 @@
 const MAX_TWEET_CHARS = 280;
 let lat = null;
 let long = null;
+let api = undefined;
 
 $( document ).on( "pageinit", "body", function() {
     $( document ).on( "swiperight", "body", function( e ) {
-        if ( $.mobile.activePage.jqmData( "panel" ) !== "open" ) {
+        if ( $.mobile.activePage.jqmData( "panel" ) !== "open" && api !== undefined ) {
             $( "#left-panel" ).panel( "open" );
         }
     });
-    loadHomeTimeline();
+    //loadHomeTimeline();
     showNewTweetControl(false);
     updateTweetCharCounter();
     $('#new-tweet').attr('maxlength', MAX_TWEET_CHARS);
@@ -17,6 +18,10 @@ $( document ).on( "pageinit", "body", function() {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(savePosition);
     }
+
+    /*$.mobile.changePage("#home",{
+        showLoadMsg: false
+    });*/
 });
 
 $(document).on('pagebeforecreate', function (e) {
@@ -35,9 +40,12 @@ $(document).on('pagebeforecreate', function (e) {
     }
 });
 
-
-let api = undefined;
-$("#getname").hide();
+$("#left-panel").hide();
+$('#homeBtn').addClass('ui-disabled');
+$('#searchBtn').addClass('ui-disabled');
+$('#notificationsBtn').addClass('ui-disabled');
+$('#messagesBtn').addClass('ui-disabled');
+$('#welcome-message').hide();
 
 OAuth.initialize('3_scpo_f6-RInRUtQ3L-8r4S2U8', {cache: true});
 let callback = OAuth.callback('twitter');
@@ -46,6 +54,16 @@ if(callback !== undefined) {
     OAuth.callback('twitter')
         .done(function(result) {
             api = result;
+            $("#left-panel").show();
+            $('#homeBtn').removeClass('ui-disabled');
+            $('#searchBtn').removeClass('ui-disabled');
+            $('#notificationsBtn').removeClass('ui-disabled');
+            $('#messagesBtn').removeClass('ui-disabled');
+            $('#loginBtn').hide();
+            $('#welcome-message').show();
+
+
+            loadHomeTimeline();
 
             result.me()
                 .done(function (response) {
@@ -54,6 +72,9 @@ if(callback !== undefined) {
                     $('.profile-pic').attr('src', response.avatar);
                     $('.profile-name').text(response.name);
                     $('.profile-alias').text('@' + response.alias);
+                    $('#profileBtn').on('click', function() {
+                        loadProfile(response.id)
+                    });
                 })
                 .fail(function (err) {
                     console.log('pičovina vyjebaná');
@@ -75,7 +96,7 @@ if(callback !== undefined) {
 
         });
 } else {
-    login();
+    //login();
 }
 
 function login() {
@@ -145,8 +166,8 @@ function drawHomeTimeline(data) {
         let created_at = new Date(data[i].created_at);
         timelineDiv.append(
             '<div>' +
-            '<img src="' + data[i].user.profile_image_url + '" class="user-img">' +
-            '<span class="username">' + data[i].user.name + '</span> <small class="after-name">@' + data[i].user.screen_name + ' • ' + created_at.toLocaleDateString() + ' ' + created_at.toLocaleTimeString() + '</small>' +
+            '<img onclick="loadProfile(' + data[i].user.id + ')" src="' + data[i].user.profile_image_url + '" class="user-img">' +
+            '<span onclick="loadProfile(' + data[i].user.id + ')" class="username">' + data[i].user.name + '</span> <small class="after-name">@' + data[i].user.screen_name + ' • ' + created_at.toLocaleDateString() + ' ' + created_at.toLocaleTimeString() + '</small>' +
             '<p>' + parseTweetFulltext(data[i]) + '</p>' +
             '</div>'
         );
@@ -233,4 +254,68 @@ function sendTweet() {
 function savePosition(position) {
     lat = position.coords.latitude;
     long = position.coords.longitude;
+}
+
+function loadProfile(user_id) {
+    $.mobile.changePage("#profile",{
+        showLoadMsg: false
+    });
+
+    let div = $('#profile-container');
+    div.empty();
+    api.get('/1.1/users/show.json', {
+        data: {
+            user_id: user_id,
+            include_entities: true
+        }
+    })
+        .done(function (response) {
+            console.log(response);
+            div.append('<div style="margin-bottom: 20px">' +
+                '<img src="' + response.profile_image_url + '" class="user-img">' +
+                '<span class="username">' + response.name + '</span><br>' +
+                '<small class="after-name">@' + response.screen_name + '</small>' +
+                '</div>' +
+                '<div class="ui-grid-b">' +
+                '<div class="ui-block-a"><div class="ui-bar ui-bar-a" style="height:40px">Tweets: ' + response.statuses_count + '</div></div>' +
+                '<div class="ui-block-b"><div class="ui-bar ui-bar-a" style="height:40px">Following: ' + response.friends_count + '</div></div>' +
+                '<div class="ui-block-c"><div class="ui-bar ui-bar-a" style="height:40px">Followers: ' + response.followers_count + '</div></div>' +
+                '</div>' +
+                '<p>Description: ' + response.description + '<br>' +
+                'Location: ' + response.location + '<br>' +
+                'Joined: ' + new Date(response.created_at).toLocaleDateString() +
+                '</p>' +
+                '<hr>');
+            div.append('<div>' +
+                '</div>');
+
+            api.get('/1.1/statuses/user_timeline.json', {
+                data: {
+                    user_id: user_id,
+                    tweet_mode: 'extended'
+                }
+            })
+                .done(function (data) {
+                    console.log(data);
+                    for(let i = 0; i < data.length; i++) {
+                        let created_at = new Date(data[i].created_at);
+                        div.append(
+                            '<div>' +
+                            '<img onclick="loadProfile(' + data[i].user.id + ')" src="' + data[i].user.profile_image_url + '" class="user-img">' +
+                            '<span onclick="loadProfile(' + data[i].user.id + ')" class="username">' + data[i].user.name + '</span> <small class="after-name">@' + data[i].user.screen_name + ' • ' + created_at.toLocaleDateString() + ' ' + created_at.toLocaleTimeString() + '</small>' +
+                            '<p>' + parseTweetFulltext(data[i]) + '</p>' +
+                            '</div>'
+                        );
+                        appendMedia(div, data[i].entities.media);
+                        div.append('<hr>');
+                    }
+                })
+                .fail(function (err) {
+                    console.log('pičovina vyjebaná');
+                });
+
+        })
+        .fail(function (err) {
+            console.log('pičovina vyjebaná');
+        });
 }
